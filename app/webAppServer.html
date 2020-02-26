@@ -4,9 +4,10 @@
     <title>FLO webApp Server</title>
     <script id="onLoadStartUp">
         function onLoadStartUp() {
-
-            var consoleClear = setInterval(console.clear, 60 * 60000)
-            floWebappServer.initWebSocket()
+            const apps = ['TEST_MODE']
+            webAppServer.setServeAppList(apps)
+            var consoleClear = setInterval(console.clear, 60 * 60000) // clear console every 1 hr
+            webAppServer.initWebSocket()
                 .then(result => console.log(result))
                 .catch(error => console.error(error))
         }
@@ -182,8 +183,8 @@
             }
         }
     </script>
-    <script id="floWebappServer">
-        const floWebappServer = {
+    <script id="webAppServer">
+        const webAppServer = {
 
             util: {
 
