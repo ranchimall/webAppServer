@@ -33,3 +33,8 @@ Requests the generalData from webAppServer
 Requests the objectData/appObjects from webAppServer
 * path: (an Array) path of the required object (eg. \['Sample', Property1, property2..]
 * Returns an Object/Array (requested path)
+
+#### requestSubAdminList
+    webAppClient.requestSubAdminList()
+Requests the subAdmin list of the application from webAppServer
+* Returns an Array (of subAdmins)
