@@ -4,7 +4,7 @@
     <title>FLO webApp Server</title>
     <script id="onLoadStartUp">
         function onLoadStartUp() {
-            const apps = ['TEST_MODE']
+            const apps = ['TEDxKanke']
             webAppServer.setServeAppList(apps)
             var consoleClear = setInterval(console.clear, 60 * 60000) // clear console every 1 hr
             webAppServer.initWebSocket()
@@ -78,20 +78,6 @@
                     var deleteReq = indexedDB.deleteDatabase(dbName);;
                     deleteReq.onerror = (event) => reject("Error deleting database!");
                     deleteReq.onsuccess = (event) => resolve("Database deleted successfully");
-                });
-            },
-
-            writeData: function (obsName, data, key = false, dbName = this.dbName) {
-                return new Promise((resolve, reject) => {
-                    this.openDB(dbName).then(db => {
-                        var obs = db.transaction(obsName, "readwrite").objectStore(obsName);
-                        let writeReq = (key ? obs.put(data, key) : obs.put(data));
-                        writeReq.onsuccess = (evt) => resolve(`Write data Successful`);
-                        writeReq.onerror = (evt) => reject(
-                            `Write data unsuccessful [${evt.target.error.name}] ${evt.target.error.message}`
-                        );
-                        db.close();
-                    }).catch(error => reject(error));
                 });
             },
 
@@ -194,11 +180,11 @@
                     return pos
                 },
 
-                getNextGeneralData: function (generalData, filterStr, vectorClock) {
+                getNextGeneralData: function (generalData, vectorClock) {
                     var filteredResult = []
-                    for (var i = 0; i < generalData[filterStr].length; i++)
-                        if (generalData[filter][i].vectorClock > vectorClock)
-                            filteredResult.push(generalData[filter][i])
+                    for (var i = 0; i < generalData.length; i++)
+                        if (generalData[i].vectorClock > vectorClock)
+                            filteredResult.push(generalData[i])
                     return filteredResult
                 },
 
@@ -249,20 +235,23 @@
 
                                     if(request[1] == "appObjects"){
                                         compactIDB.readData(request[1], request[2], request[0]).then(result => {
-                                            var response = [true, this.util.objectDataFetch(result, request.slice(2))]
+                                            var response = [true, this.util.objectDataFetch(result, request.slice(3))]
+                                            console.log(request, response)
                                             this.webSocket.send(`${requestor} ${JSON.stringify(response)}`)
                                         })
                                     }
                                     else if (request[1] == "generalData"){
                                         var filterStr = this.util.getFilterString(request[0], request[2])
                                         compactIDB.readData(request[1], filterStr, request[0]).then(result => {
-                                            var response = [true, this.util.getNextGeneralData(result, filterStr, request[3])]
+                                            var response = [true, this.util.getNextGeneralData(result, request[3])]
+                                            console.log(request, response)
                                             this.webSocket.send(`${requestor} ${JSON.stringify(response)}`)
                                         })
                                     }
                                     else if(request[1] == "subAdmins"){
                                         compactIDB.readAllData(request[1], request[0]).then(result => {
                                             var response = [true, Object.keys(result)]
+                                            console.log(request, response)
                                             this.webSocket.send(`${requestor} ${JSON.stringify(response)}`)
                                         })
                                     }
