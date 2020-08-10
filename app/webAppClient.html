@@ -18,25 +18,7 @@
         //Add this to the client script to request data from floWebappServer
         const webAppClient = {
             util: {
-                sendData(data) {
-                    return new Promise((resolve, reject) => {
-                        var websocket = new WebSocket("wss://" + floGlobals.webAppURL + "/ws");
-                        websocket.onmessage = (evt => {
-                            if (evt.data == '$+') {
-                                websocket.send(data);
-                                resolve(`Data sent to webApp`);
-                            } else if (evt.data == '$-')
-                                reject(`webApp not available`)
-                            else
-                                reject(evt.data)
-                            websocket.close();
-                        })
-                        websocket.onerror = (evt) => {
-                            reject(`webApp server not found`)
-                        };
-                    })
-                },
-
+                
                 requestData(request = []) {
                     return new Promise((resolve, reject) => {
                         var websocket = new WebSocket("wss://" + floGlobals.webAppURL + "/ws");
@@ -56,24 +38,6 @@
                         };
                     })
                 }
-            },
-
-            sendGeneralData: function (message, type, options = {}) {
-                return new Promise((resolve, reject) => {
-                    var data = {
-                        senderID: myFloID,
-                        receiverID: options.receiverID || floGlobals.adminID,
-                        pubKey: myPubKey,
-                        message: message,
-                        sign: floCrypto.signData(JSON.stringify(message), myPrivKey),
-                        application: options.application || floGlobals.application,
-                        type: type,
-                        comment: options.comment || ""
-                    }
-                    this.util.sendData(JSON.stringify(data), data.receiverID)
-                        .then(result => resolve(result))
-                        .catch(error => reject(error))
-                })
             },
 
             requestGeneralData: function (type, vectorClock = '0') {
