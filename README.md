@@ -15,12 +15,6 @@ This server is used to get the appObjects and generalData for the webApp clients
 
 ### Properties
 
-#### sendGeneralData
-    webAppClient.sendGeneralData(message, type, options = {})
-Sends a message to the cloud via webAppServer
-* message: content of the message
-* type: type of the message
-
 #### requestGeneralData
     webAppClient.requestGeneralData(type, vectorClock = '0')
 Requests the generalData from webAppServer
@@ -38,3 +32,6 @@ Requests the objectData/appObjects from webAppServer
     webAppClient.requestSubAdminList()
 Requests the subAdmin list of the application from webAppServer
 * Returns an Array (of subAdmins)
+
+### Architecture Diagram
+![webAppServer-Architecture.png](util/webAppServer-Architecture.png)
