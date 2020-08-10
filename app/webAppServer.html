@@ -261,12 +261,6 @@
                                     response = [false, error.message]
                                     this.webSocket.send(`${requestor} ${JSON.stringify(response)}`)
                                 }
-                            } else {
-                                var data = JSON.parse(evt.data)
-                                if (this.serveAppList.includes(data.application))
-                                    floSupernode.sendData(JSON.stringify(data), data.receiverID)
-                                    .then(result => resolve(result))
-                                    .catch(error => reject(error))
                             }
                         };
                         this.webSocket.onerror = (evt) => {
